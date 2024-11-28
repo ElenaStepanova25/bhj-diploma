@@ -19,10 +19,14 @@ class Sidebar {
    * */
   static initToggleButton() {
     const btn = document.querySelector('.sidebar-toggle');
-    btn.addEventListener('click', function () {
-      App.element.classList.toggle('sidebar-open');
-      App.element.classList.toggle('sidebar-collapse');
-    });
+    // Проверяем, существует ли кнопка
+    if (btn) {
+      btn.addEventListener('click', function () {
+        // Переключаем классы sidebar-open и sidebar-collapse
+        document.body.classList.toggle('sidebar-open');
+        document.body.classList.toggle('sidebar-collapse');
+      });
+    }
   }
 
   /**
@@ -37,20 +41,31 @@ class Sidebar {
     const register = document.querySelector('.menu-item_register');
     const logout = document.querySelector('.menu-item_logout');
 
-    login.addEventListener('click', () => {
-      App.getModal('login').open();
-    });
-    register.addEventListener('click', () => {
-      App.getModal('register').open();
-    });
-    logout.addEventListener('click', (e) => {
-      e.preventDefault();
-      User.logout((err, response) => {
-        if (response.success) {
-          App.setState('init')
-          User.current();
-        }
+    // Проверяем, существуют ли элементы меню
+    if (login) {
+      login.addEventListener('click', () => {
+        const modalLogin = App.getModal('login');
+        if (modalLogin) modalLogin.open();
       });
-    });
+    }
+
+    if (register) {
+      register.addEventListener('click', () => {
+        const modalRegister = App.getModal('register');
+        if (modalRegister) modalRegister.open();
+      });
+    }
+
+    if (logout) {
+      logout.addEventListener('click', (e) => {
+        e.preventDefault();
+        User.logout((err, response) => {
+          if (response.success) {
+            App.setState('init');
+            User.current(); // Обновляем информацию о текущем пользователе
+          }
+        });
+      });
+    }
   }
 }

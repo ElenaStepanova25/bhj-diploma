@@ -26,8 +26,8 @@ class AsyncForm {
    * */
   registerEvents() {
     this.element.addEventListener('submit', (e) => {
-      this.submit();
-      e.preventDefault();
+      e.preventDefault(); // Запрещает перезагрузку страницы
+      this.submit(); // Вызывает метод submit
     });
   }
 

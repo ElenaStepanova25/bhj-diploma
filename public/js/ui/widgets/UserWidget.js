@@ -26,8 +26,17 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update(){
-    const currentUser = User.current();
-    const userName = document.querySelector(".user-name");
-    userName.innerText = currentUser.name;
+    const currentUser  = User.current();
+    // Проверяем, авторизован ли пользователь
+    if (currentUser ) {
+      // Находим элемент .user-name внутри элемента виджета
+      const userNameElement = this.element.querySelector(".user-name");
+      // Устанавливаем имя пользователя
+      userNameElement.innerText = currentUser .name;
+    } else {
+      // Если пользователь не авторизован, очищаем имя
+      const userNameElement = this.element.querySelector(".user-name");
+      userNameElement.innerText = '';
+    }
   }
 }

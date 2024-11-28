@@ -8,39 +8,41 @@ const createRequest = (options = {}) => {
     xhr.responseType = 'json';
 
     if (options.method === 'GET') {
-        if (Object.keys(options.data).length > 0) {
-            url += '?';
-            for (const key in options.data) {
-                url += `${key}=${options.data[key]}&`
-            }
-            url = url.slice(0, -1);
-        }
-        try {
-            xhr.open(options.method, url);
-            xhr.send();
-        }
-        catch (e) {
-            options.callback(e, null);
-        }
-    } else {
-        const formData = new FormData();
-        for (const key in options.data) {
-            formData.append(key, options.data[key]);
-        }
-        try {
-            xhr.open(options.method, url);
-            xhr.send(formData);
-        }
-        catch (e) {
-            options.callback(e, null);
+        if (options.data && Object.keys(options.data).length > 0) {
+            const params = new URLSearchParams(options.data).toString();
+            url += '?' + params;
         }
     }
+
+    xhr.open(options.method, url);
+
     xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
+        if (xhr.status >= 200 && xhr.status < 300) {
             options.callback(null, xhr.response);
+        } else {
+            options.callback(new Error(`Ошибка ${xhr.status}: ${xhr.statusText}`), null);
         }
     });
+
     xhr.addEventListener('error', function () {
-        options.callback(xhr.status, xhr.statusText);
+        options.callback(new Error('Сетевой ошибка'), null);
     });
+
+    try {
+        if (options.method === 'POST') {
+            const formData = new FormData();
+            if (options.data) {
+                for (const key in options.data) {
+                    formData.append(key, options.data[key]);
+                }
+            }
+            xhr.send(formData);
+        } else {
+            xhr.send();
+        }
+    } catch (e) {
+        options.callback(e, null);
+    }
+
+    return xhr;
 };
