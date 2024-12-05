@@ -220,6 +220,15 @@
       "account_id": "44j18sm3zyrkwe",
       "user_id": "44j5ekm3zypaki",
       "created_at": "2024-11-27T14:38:18.077Z"
+    },
+    {
+      "id": "44jav4m4behc8r",
+      "type": "income",
+      "name": "ООО \"Копыта\"",
+      "sum": 150,
+      "account_id": "44j9akm3zyrwch",
+      "user_id": "44j5ekm3zypaki",
+      "created_at": "2024-12-05T14:16:31.034Z"
     }
   ]
 }

@@ -17,30 +17,26 @@ const createRequest = (options = {}) => {
     xhr.open(options.method, url);
 
     xhr.addEventListener('load', function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            options.callback(null, xhr.response);
-        } else {
-            options.callback(new Error(`Ошибка ${xhr.status}: ${xhr.statusText}`), null);
-        }
-    });
+        // Убираем проверку статуса, так как load срабатывает только на успешных запросах
+        options.callback(null, xhr.response);
+        });
 
     xhr.addEventListener('error', function () {
         options.callback(new Error('Сетевой ошибка'), null);
     });
 
     try {
-        if (options.method === 'POST') {
-            const formData = new FormData();
+        let formData = null;
+        if (options.method !== 'GET') {
+            formData = new FormData();
             if (options.data) {
                 for (const key in options.data) {
                     formData.append(key, options.data[key]);
                 }
             }
-            xhr.send(formData);
-        } else {
-            xhr.send();
-        }
-    } catch (e) {
+        }    
+            xhr.send(formData || null);
+        } catch (e) {
         options.callback(e, null);
     }
 

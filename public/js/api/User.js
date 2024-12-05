@@ -26,11 +26,7 @@ class User {
    * из локального хранилища
    * */
   static current() {
-    try {
-      return JSON.parse(localStorage.user);
-    } catch (err) {
-      return null;
-    }
+    return JSON.parse(localStorage.getItem('user'));
   }
 
   /**
